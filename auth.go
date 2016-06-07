@@ -124,18 +124,17 @@ func GrabCode(){
 func GrabNPSSO(){
     req, err := http.NewRequest("POST", SSO_URL, bytes.NewBufferString(http_build_query(login_request)))
     req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+    
     client := &http.Client{}
     resp, err := client.Do(req)
+
     if err != nil {
         panic(err)
     }
 
-    body, _ := ioutil.ReadAll(resp.Body)
-
     var res login_response
-    json.Unmarshal([]byte(string(body)), &res)
+    err = json.NewDecoder(resp.Body).Decode(&res)
 
     npsso = res.Npsso
-
     GrabCode()
 }
