@@ -133,8 +133,11 @@ func GrabNPSSO(){
     }
 
     var res login_response
-    err = json.NewDecoder(resp.Body).Decode(&res)
 
+    err = json.NewDecoder(resp.Body).Decode(&res)
+    if err != nil{
+        panic(err)
+    }
     npsso = res.Npsso
     GrabCode()
 }
