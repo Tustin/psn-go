@@ -121,8 +121,6 @@ func GrabOAuth(npsso string, grant_code string) (oauth_response, error) {
 	}
 
 	var oa oauth_response
-	//data, _ := ioutil.ReadAll(res.Body)
-	//fmt.Printf("%s", data)
 	err = json.NewDecoder(res.Body).Decode(&oa)
 	defer res.Body.Close()
 
@@ -169,6 +167,8 @@ func GrabNPSSO() (string, error) {
 		return "", err
 	}
 
+	defer resp.Body.Close()
+
 	//API didn't give an OK, so handle it as an error
 	if resp.StatusCode != http.StatusOK {
 		var api_error login_response_fail
@@ -181,7 +181,6 @@ func GrabNPSSO() (string, error) {
 
 	var res login_response
 	err = json.NewDecoder(resp.Body).Decode(&res)
-	defer resp.Body.Close()
 
 	if err != nil {
 		return "", err
